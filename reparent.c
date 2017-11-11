@@ -12,8 +12,8 @@ Pixmap maxPixmap; // maximize image
 Pixmap unmaxPixmap; // unmaximize image
 Pixmap closePixmap; // close window image
 
-/* Color of the frames, read by parseRC in initCapstone.c */
-unsigned long frameColor = 0;
+unsigned long  titleBarColor = 0x000000; // color of the titleBar
+unsigned long  borderColor   = 0x000000; // color of the window border
 
 Bool reparentWindow(Window child, Bool before_wm)
 {
@@ -67,7 +67,7 @@ Bool reparentWindow(Window child, Bool before_wm)
         childWinInfo.width,
         childWinInfo.height+TITLE_HEIGHT,
         BORDER_WIDTH,
-        0xFF0000,      // TODO - change this to the read in border color
+        borderColor,      // TODO - change this to the read in border color
         0x000000       // TODO - change to frame bg color
     );
     
@@ -81,7 +81,7 @@ Bool reparentWindow(Window child, Bool before_wm)
         TITLE_HEIGHT,
         0,
         0x000000,      // TODO - change this to the read in border color
-        0xFFFF00       // TODO - change to frame bg color
+        titleBarColor       // TODO - change to frame bg color
     );
     
     /* Create each button window */

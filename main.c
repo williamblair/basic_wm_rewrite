@@ -12,11 +12,17 @@
 #include "keyEvents.h"
 #include "motionEvents.h"
 
+#include "initCapstone.h"
+
 /***************************************/
 /**         GLOBAL VARIABLES          **/
 /***************************************/
 Display *d; // connection to the X display
 WMClient *clientHead; // the head of the WMClient linked list
+
+/* location of the programs list for the program menu,
+ * set by parseRC in initCapstone.c */
+char *menuFilePath = NULL;
 
 /***************************************/
 /**        FUNCTION PROTOTYPES        **/
@@ -29,6 +35,21 @@ Bool mainLoop(void);
 
 int main(int argc, char **argv)
 {
+    // parse the rc file
+    if(argc != 2){
+        printf("No rc file given! Using default location\n");
+        if(!parseRC("files/capstoneInit.rc")){
+            printf("Failed to load file!\n");
+        }
+        else{
+            printf("Loaded file!\n");
+        }
+    }
+    else{
+        printf("Using argument file!\n");
+        parseRC(argv[1]);
+    }
+    
     // init X
     if(!initX()) return -1;
     

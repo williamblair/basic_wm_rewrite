@@ -18,6 +18,8 @@
     <File Name="motionEvents.h"/>
     <File Name="keyEvents.c"/>
     <File Name="keyEvents.h"/>
+    <File Name="initCapstone.c"/>
+    <File Name="initCapstone.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

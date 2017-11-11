@@ -61,7 +61,7 @@ AS       := /usr/bin/as
 ##
 CodeLiteDir:=/usr/share/codelite
 TERM:=xterm
-Objects0=$(IntermediateDirectory)/main.c$(ObjectSuffix) $(IntermediateDirectory)/reparent.c$(ObjectSuffix) $(IntermediateDirectory)/displayEvents.c$(ObjectSuffix) $(IntermediateDirectory)/destroyEvents.c$(ObjectSuffix) $(IntermediateDirectory)/configureEvents.c$(ObjectSuffix) $(IntermediateDirectory)/buttonEvents.c$(ObjectSuffix) $(IntermediateDirectory)/motionEvents.c$(ObjectSuffix) $(IntermediateDirectory)/keyEvents.c$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.c$(ObjectSuffix) $(IntermediateDirectory)/reparent.c$(ObjectSuffix) $(IntermediateDirectory)/displayEvents.c$(ObjectSuffix) $(IntermediateDirectory)/destroyEvents.c$(ObjectSuffix) $(IntermediateDirectory)/configureEvents.c$(ObjectSuffix) $(IntermediateDirectory)/buttonEvents.c$(ObjectSuffix) $(IntermediateDirectory)/motionEvents.c$(ObjectSuffix) $(IntermediateDirectory)/keyEvents.c$(ObjectSuffix) $(IntermediateDirectory)/initCapstone.c$(ObjectSuffix) 
 
 
 
@@ -155,6 +155,14 @@ $(IntermediateDirectory)/keyEvents.c$(DependSuffix): keyEvents.c
 
 $(IntermediateDirectory)/keyEvents.c$(PreprocessSuffix): keyEvents.c
 	$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/keyEvents.c$(PreprocessSuffix) keyEvents.c
+
+$(IntermediateDirectory)/initCapstone.c$(ObjectSuffix): initCapstone.c $(IntermediateDirectory)/initCapstone.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "/home/bj/codelite-projs/basic_cm_rewrite/initCapstone.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/initCapstone.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/initCapstone.c$(DependSuffix): initCapstone.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/initCapstone.c$(ObjectSuffix) -MF$(IntermediateDirectory)/initCapstone.c$(DependSuffix) -MM initCapstone.c
+
+$(IntermediateDirectory)/initCapstone.c$(PreprocessSuffix): initCapstone.c
+	$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/initCapstone.c$(PreprocessSuffix) initCapstone.c
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

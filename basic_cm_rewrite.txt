@@ -1,1 +1,1 @@
-./Debug/main.c.o ./Debug/reparent.c.o ./Debug/displayEvents.c.o ./Debug/destroyEvents.c.o ./Debug/configureEvents.c.o ./Debug/buttonEvents.c.o ./Debug/motionEvents.c.o ./Debug/keyEvents.c.o
+./Debug/main.c.o ./Debug/reparent.c.o ./Debug/displayEvents.c.o ./Debug/destroyEvents.c.o ./Debug/configureEvents.c.o ./Debug/buttonEvents.c.o ./Debug/motionEvents.c.o ./Debug/keyEvents.c.o ./Debug/initCapstone.c.o
