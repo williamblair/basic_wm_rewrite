@@ -13,5 +13,6 @@ Bool hCreateNotify(const XCreateWindowEvent e);
 Bool hReparentNotify(const XReparentEvent e);
 Bool hMapNotify(const XMapEvent e);
 Bool hMapRequest(const XMapRequestEvent e);
+Bool hExpose(const XExposeEvent e);
 
 #endif

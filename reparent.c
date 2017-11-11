@@ -5,6 +5,7 @@
 // variables from main.c
 extern Display *d;
 extern WMClient *clientHead; // the head of the WMClient linked list
+extern Window   task_bar; //task bar window for reparenting
 
 // global variables
 Pixmap minPixmap; // minimize image
@@ -14,6 +15,9 @@ Pixmap closePixmap; // close window image
 
 unsigned long  titleBarColor = 0x000000; // color of the titleBar
 unsigned long  borderColor   = 0x000000; // color of the window border
+
+// function prototypes
+Window make_task_window(int x_pos);
 
 Bool reparentWindow(Window child, Bool before_wm)
 {
@@ -112,14 +116,17 @@ Bool reparentWindow(Window child, Bool before_wm)
                                     0,                       // border size
                                     WhitePixel(d, DefaultScreen(d)),    // border
                                     0x00FF00);   // background        
+    
+    c->task_icon = None;//XCreateSimpleWindow(d, task_bar, 21, ((get_task_attrbs.height)/4), 20, task_win_h, 0, 0, 0xf46e42);                                
+    
     /* give each button window their image */
     XSetWindowBackgroundPixmap(d, c->minWin, minPixmap);
     XSetWindowBackgroundPixmap(d, c->maxWin, maxPixmap);
     XSetWindowBackgroundPixmap(d, c->closeWin, closePixmap);
     
-    XMapWindow(d, c->minWin);
-    XMapWindow(d, c->maxWin);
-    XMapWindow(d, c->closeWin);
+    //XMapWindow(d, c->minWin);
+    //XMapWindow(d, c->maxWin);
+    //XMapWindow(d, c->closeWin);
     
     /* Grab a the mouse click on any of the min/max/close windows */
     XGrabButton(
@@ -199,8 +206,8 @@ Bool reparentWindow(Window child, Bool before_wm)
     );
     
     // display the frame
-    XMapWindow(d, c->frame);
-    XMapWindow(d, c->titleBar);
+    //XMapWindow(d, c->frame);
+    //XMapWindow(d, c->titleBar);
     
     // Grab buttons on the child window
     //   a. Move windows with alt + left button.
@@ -276,6 +283,10 @@ Bool reparentWindow(Window child, Bool before_wm)
     );
     
     if(childName) XFree(childName);
+    
+    // display all child windows/window frame
+    XMapWindow(d, c->frame);
+    XMapSubwindows(d, c->frame);
     
     return True;
 }
@@ -458,4 +469,21 @@ void reparentClosePixmaps(void)
     if(maxPixmap) XFreePixmap(d, maxPixmap);
     if(unmaxPixmap) XFreePixmap(d, unmaxPixmap);
     if(closePixmap) XFreePixmap(d, closePixmap);
+}
+
+Window make_task_window(int x_pos)
+{
+  Window send;
+  XWindowAttributes   get_task_attrbs;
+  XGetWindowAttributes(d, task_bar, &get_task_attrbs);
+  unsigned task_win_h = ((get_task_attrbs.height*3)/4);
+  printf("\nHeight of taskbar %u\n", task_win_h);
+  send = XCreateSimpleWindow(d, task_bar, x_pos, ((get_task_attrbs.height)/4), 20, task_win_h, 0, 0, 0xf46e42);
+  XWindowAttributes   pass_attributes;
+  XGetWindowAttributes(d, send, &pass_attributes);
+  GC gc_taskbar_win = XCreateGC(d, send, 0,0);
+  XDrawString(d, send, gc_taskbar_win, 0, 0, "Win 1", strlen("Win 1"));
+  XMapWindow(d, send);
+
+  return send;
 }
