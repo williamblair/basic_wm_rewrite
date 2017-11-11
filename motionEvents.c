@@ -31,7 +31,9 @@ Bool hMotionNotify(const XMotionEvent e)
     WMClient *temp = clientHead;
     while(temp != NULL)
     {
-        if(temp->child == e.window) break;
+        //if(temp->child == e.window) break;
+        if(temp->child == e.window ||
+           temp->titleBar == e.window) break;
         temp = temp->next;
     }
     if(temp == NULL){
@@ -59,7 +61,6 @@ Bool hMotionNotify(const XMotionEvent e)
         int newWidth = startWinWidth + dX;
         int newHeight = startWinHeight + dY;
         
-        // TODO - make this resize the frame also
         XResizeWindow(
             d,
             (e.window) ? e.window : e.subwindow, 
@@ -72,6 +73,16 @@ Bool hMotionNotify(const XMotionEvent e)
             temp->frame,
             (newWidth >= 10) ? newWidth : 10,
             (newHeight >= 10) ? newHeight: 10
+        );
+        
+        // resize the titlebar
+        XWindowAttributes tAttribs;
+        XGetWindowAttributes(d, temp->titleBar, &tAttribs);
+        XResizeWindow(
+            d,
+            temp->titleBar,
+            (newWidth >= 10) ? newWidth : 10,
+            tAttribs.height
         );
     }
     

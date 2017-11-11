@@ -30,11 +30,14 @@ Bool hButtonPress(const XButtonEvent e)
     WMClient *temp = clientHead;
     while(temp != NULL)
     {
-        if(temp->child == e.window) break;
+        // either the frame or child window is clicked
+        //if(temp->child == e.window) break;
+        if(temp->child    == e.window ||
+           temp->titleBar == e.window) break;
         temp = temp->next;
     }
     if(temp == NULL){
-        printf("hButtonPress: failed to find child within clients!\n");
+        printf("hButtonPress: failed to find child or frame within clients!\n");
         return False;
     }
     

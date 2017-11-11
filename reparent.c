@@ -63,10 +63,23 @@ Bool reparentWindow(Window child, Bool before_wm)
         childWinInfo.x,
         childWinInfo.y,
         childWinInfo.width,
-        childWinInfo.height,
+        childWinInfo.height+TITLE_HEIGHT,
         BORDER_WIDTH,
         0xFF0000,      // TODO - change this to the read in border color
         0x000000       // TODO - change to frame bg color
+    );
+    
+    // create the title bar
+    c->titleBar = XCreateSimpleWindow(
+        d,
+        c->frame,
+        0,
+        0,
+        childWinInfo.width,
+        TITLE_HEIGHT,
+        0,
+        0x000000,      // TODO - change this to the read in border color
+        0xFFFF00       // TODO - change to frame bg color
     );
     
     // map the child window to our client
@@ -79,6 +92,21 @@ Bool reparentWindow(Window child, Bool before_wm)
         SubstructureNotifyMask | SubstructureRedirectMask
     );
     
+    // Grab left mouse click on the title bar
+    XGrabButton(
+        d,
+        Button1,
+        //Mod1Mask,
+        None,
+        c->titleBar,
+        False,
+        ButtonPressMask | ButtonReleaseMask | ButtonMotionMask,
+        GrabModeAsync,
+        GrabModeAsync,
+        None,
+        None
+    );
+    
     // add the child to save set to restore if we crash
     XAddToSaveSet(d, child);
     
@@ -87,11 +115,12 @@ Bool reparentWindow(Window child, Bool before_wm)
         d,
         child,
         c->frame,
-        0, 0
+        0, TITLE_HEIGHT
     );
     
     // display the frame
     XMapWindow(d, c->frame);
+    XMapWindow(d, c->titleBar);
     
     // Grab buttons on the child window
     //   a. Move windows with alt + left button.

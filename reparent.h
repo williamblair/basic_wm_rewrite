@@ -16,7 +16,8 @@
 // groups frame windows and the actual app windows
 typedef struct WMClient
 {
-    Window frame;  // the border to click/drag
+    Window frame;    // the border/container window
+    Window titleBar; // the title bar to click/drag
     Window minWin; // minimize, maximize, and close subwindows
     Window maxWin;
     Window closeWin;
