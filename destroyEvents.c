@@ -31,6 +31,29 @@ Bool hUnmapNotify(const XUnmapEvent e)
         return True;
     }
     
+    // ignore if the windows were just minimized
+    WMClient *c = clientHead;
+    while(c != NULL)
+    {
+        if(c->child == e.window ||
+           c->frame == e.window ||
+           c->minWin == e.window ||
+           c->maxWin == e.window ||
+           c->closeWin == e.window ||
+           c->titleBar == e.window ) break;
+
+        c = c->next;
+    }
+    if(c == NULL){
+        printf("hUnmapNotify: failed to find event window in clients!\n");
+    }
+    else{
+        if(c->minimized){
+            printf("Unmap event is for minimized window, not destroying!\n");
+            return True;
+        }
+    }
+    
     // destroy the client and reparent the child window to the
     // root before it is destroyed
     // defined in reparent.c

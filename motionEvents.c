@@ -65,7 +65,7 @@ Bool hMotionNotify(const XMotionEvent e)
             d,
             (e.window) ? e.window : e.subwindow, 
             (newWidth >= 10) ? newWidth : 10,
-            (newHeight >=10) ? newHeight : 10
+            (newHeight-TITLE_HEIGHT >=10) ? newHeight-TITLE_HEIGHT : 10
         );
         
         XResizeWindow(
@@ -78,13 +78,48 @@ Bool hMotionNotify(const XMotionEvent e)
         // resize the titlebar
         XWindowAttributes tAttribs;
         XGetWindowAttributes(d, temp->titleBar, &tAttribs);
+        int titleWidth = newWidth - BUTTON_SIZE*3;
         XResizeWindow(
             d,
             temp->titleBar,
-            (newWidth >= 10) ? newWidth : 10,
+            (titleWidth >= 10) ? titleWidth : 10,
             tAttribs.height
         );
+
+        // move the buttons
+        XMoveWindow(
+            d, 
+            temp->minWin, 
+            newWidth - BUTTON_SIZE*3,
+            0
+        );
+        XMoveWindow(
+            d, 
+            temp->maxWin, 
+            newWidth - BUTTON_SIZE*2,
+            0
+        );
+        XMoveWindow(
+            d, 
+            temp->closeWin, 
+            newWidth - BUTTON_SIZE*1,
+            0
+        );
     }
+    
+    // redraw the title string
+    
+    XWindowAttributes fAttribs; // frame attributes
+    XGetWindowAttributes(d, temp->frame, &fAttribs);
+    XDrawString(
+        d,
+        temp->titleBar,                                        // Drawable d
+        DefaultGC(d, DefaultScreen(d)),                        // GC
+        (fAttribs.width / 2) - strlen(temp->title)*CHAR_WIDTH, // x
+        (TITLE_HEIGHT / 2) + CHAR_WIDTH/2,                                      // y
+        temp->title,                                           // string
+        strlen(temp->title)                                    // length of string
+    );
     
     return True;
 }

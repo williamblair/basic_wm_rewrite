@@ -32,6 +32,12 @@ int main(int argc, char **argv)
     // init X
     if(!initX()) return -1;
     
+    // load pixmaps for the window borders
+    reparentLoadPixmaps("files/minimize.xpm",
+                        "files/maximize.xpm",
+                        "files/unmaximize.xpm",
+                        "files/close.xpm");
+    
     // frame any programs running before the 
     // window manager started
     reparentExistingWindows();
@@ -39,6 +45,7 @@ int main(int argc, char **argv)
     // check for and handle events
     mainLoop();
     
+    reparentClosePixmaps();
     if(d) XCloseDisplay(d);
     return 0;
 }
